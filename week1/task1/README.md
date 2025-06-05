@@ -28,9 +28,9 @@ echo 'export PATH=$HOME/riscv/bin:$PATH' >> ~/.bashrc
 source ~/.bashrc
 
 ### ✅ 4. Version Check Commands
-✔️ GCC Version
+-✔️ GCC Version
 - riscv32-unknown-elf-gcc --version
-✔️ Objdump Version
+-✔️ Objdump Version
 - riscv32-unknown-elf-objdump --version
-✔️ GDB Version
+-✔️ GDB Version
 - riscv32-unknown-elf-gdb --version
