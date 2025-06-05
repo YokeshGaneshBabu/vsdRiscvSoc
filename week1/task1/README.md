@@ -29,8 +29,8 @@ source ~/.bashrc
 
 ### ✅ 4. Version Check Commands
 ✔️ GCC Version
-riscv32-unknown-elf-gcc --version
+- riscv32-unknown-elf-gcc --version
 ✔️ Objdump Version
-riscv32-unknown-elf-objdump --version
+- riscv32-unknown-elf-objdump --version
 ✔️ GDB Version
-riscv32-unknown-elf-gdb --version
+- riscv32-unknown-elf-gdb --version
