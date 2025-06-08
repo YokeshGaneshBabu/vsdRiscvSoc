@@ -6,7 +6,7 @@ This repository documents a 34-week project under the VSD-SoC-Labs initiative, s
 
 ## 📋 Project Structure
 
-This 34-week project is divided into weekly milestones, each focusing on a specific aspect of RISC-V SoC design and development. Below is the week-by-week breakdown, with links to detailed documentation for each week (where available). Currently, only Week 1 has been completed. Screenshots for each week are stored in the `screenshots/` directory, organized by week (e.g., `screenshots/week1/`).
+This 34-week project is divided into weekly milestones, each focusing on a specific aspect of RISC-V SoC design and development. Below is the week-by-week breakdown, with links to detailed documentation for each week (where available). Currently, only Week 1 has been completed. Screenshots for each week are stored in the each week's `images/` directory.
 
 ### Week-by-Week Breakdown
 
