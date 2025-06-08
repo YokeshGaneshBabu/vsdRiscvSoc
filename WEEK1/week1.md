@@ -82,12 +82,12 @@ Write, compile, and verify a simple "Hello, RISC-V!" C program to test the toolc
 - **Platform**: Ubuntu 24.04 LTS, providing the environment for compilation and verification.
 
   ### 📄 Code
-  ```bash
-   #include <stdio.h>
-   int main() {
+
+      #include <stdio.h>
+      int main() {
        printf("Hello, RISC-V!\n");
-    return 0;
-   }
+      return 0;
+      }
 Explanation: This program tests the toolchain by printing a message. Since we’re targeting a bare-metal environment, stdio.h functions like printf may not output directly without UART setup (addressed in later tasks). The focus here is on successful compilation.
 
    ### 🔧 Compile
