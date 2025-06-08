@@ -284,13 +284,14 @@ Explanation: The same code from Task 2 is used for debugging.
 Explanation: Runs the ELF in QEMU with a GDB server on port 1234.
 
 ### 🧠 Terminal 2: GDB
+     riscv32-unknown-elf-readelf -h hello.elf | grep Entry
      riscv32-unknown-elf-gdb hello.elf
     (gdb) target remote :1234
     (gdb) break main
     (gdb) continue
     (gdb) stepi
     (gdb) info registers a0
-    (gdb) disassemble
+    (gdb) disassemble main
 Explanation:  
 - target remote :1234: Connects GDB to QEMU.  
 - break main: Sets a breakpoint at main.  
@@ -674,7 +675,7 @@ Explanation: Sets up the stack pointer and jumps to main.
 
 ### 🔧 Commands
     riscv32-unknown-elf-gcc -g -O2 -march=rv32im -mabi=ilp32 -nostdlib -T linker10.ld -o task10.elf task10.c startup10.s
-    readelf -h task10.elf
+    riscv32-unknown-elf-readelf -h task10.elf
     qemu-system-riscv32 -nographic -machine virt -bios none -kernel task10.elf
 Explanation: Compiles, checks the ELF header, and runs the program on QEMU.
 
@@ -1015,7 +1016,7 @@ Explanation: Sets up the stack, waits for UART, sets the trap vector, and jumps 
       }
 Explanation: Defines memory layout for the bare-metal program.
 ### 🔧 Commands
-      riscv32-unknown-elf-gcc -g -O0 -march=rv32im -mabi=ilp32 -nostdlib -T linker13.ld -o timer.elf timer_interrupt.c startup13.s trap_handler.s
+      riscv32-unknown-elf-gcc -g -O0 -march=rv32im -mabi=ilp32 -nostdlib -T linker13.ld -o timer.elf timer_interrupt.c startup13.s trap_handler.s startup13.s
       qemu-system-riscv32 -nographic -machine virt -bios none -kernel timer.elf
 Explanation: Compiles and runs the program on QEMU.
 
