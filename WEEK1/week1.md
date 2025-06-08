@@ -92,7 +92,7 @@ Explanation: This program tests the toolchain by printing a message. Since we’
 
    ### 🔧 Compile
     ```bash
-       riscv32-unknown-elf-gcc -o hello.elf hello.c
+    riscv32-unknown-elf-gcc -o hello.elf hello.c
 Explanation: Compiles the C code into an ELF file (hello.elf), a common format for RISC-V bare-metal programs.
 
    ### 🔍 Verify ELF
