@@ -9,6 +9,27 @@
 
 This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC-V toolchain, C-to-assembly translation, disassembly, ABI understanding, GDB debugging, bare-metal execution with QEMU and OpenSBI, inline assembly for performance measurement, memory-mapped I/O for GPIO toggling, linker script implementation, start-up code analysis, interrupt handling, and ISA extension comparison. Each task includes commands, code, detailed explanations, and issues faced. All code is embedded directly in this README for simplicity.
 
+## 📊SUMMARY TABLE
+| Task No | Title                              | Status    | One-line Summary                                      |
+|---------|------------------------------------|-----------|-------------------------------------------------------|
+| 1       | Toolchain Installation & Verification | Completed | Installed RISC-V toolchain and verified functionality. |
+| 2       | Compiling a RISC-V C Program       | Completed | Compiled a simple RISC-V C program to ELF.            |
+| 3       | C to Assembly Conversion           | Completed | Converted C code to RISC-V assembly for analysis.     |
+| 4       | Disassembly & Hex Dump             | Completed | Disassembled ELF and generated binary/hex outputs.    |
+| 5       | ABI & Register Cheat-Sheet         | Completed | Documented RV32 ABI and register roles.               |
+| 6       | Debugging with GDB                 | Completed | Debugged program with GDB and QEMU, inspecting registers. |
+| 7       | Bare-Metal Execution with QEMU     | Completed | Ran bare-metal ELF on QEMU with OpenSBI, using UART.  |
+| 8       | GCC Optimization Analysis          | Completed | Compared -O0 vs -O2 assembly for optimization effects. |
+| 9       | Inline Assembly Basics             | Completed | Measured execution time using inline assembly and rdcycle. |
+| 10      | Memory-Mapped I/O Demo             | Completed | Demonstrated memory-mapped I/O by toggling GPIO.      |
+| 11      | Linker Script 101                  | Completed | Implemented linker script placing .text at 0x00000000. |
+| 12      | Start-up Code & crt0               | Completed | Explained crt0.S responsibilities and sources.        |
+| 13      | Interrupt Primer                   | Completed | Enabled and handled machine-timer interrupt (MTIP).   |
+| 14      | RV32IMAC vs RV32IMC – What’s the “A”? | Completed | Explained RV32IMAC’s atomic extension (A) and its uses. |
+| 15      | Atomic Test Program                | Completed | Implemented a mutex using lr.w/sc.w for thread safety. |
+| 16      | Using Newlib printf Without an OS  | Completed | Retargeted Newlib printf to UART with custom _write.  |
+
+
 ## 📦 Task 1: Toolchain Installation & Verification
 
 **Status:** Completed
