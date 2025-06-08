@@ -6,7 +6,19 @@
 💻 **Platform:** Ubuntu 24.04 LTS  
 📊 **Progress:** 17/17
 ## 📋 Overview
-This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC-V toolchain, C-to-assembly translation, disassembly, ABI understanding, GDB debugging, bare-metal execution with QEMU and OpenSBI, inline assembly for performance measurement, memory-mapped I/O for GPIO toggling, linker script implementation, start-up code analysis, interrupt handling, and ISA extension comparison. Each task includes commands, code, detailed explanations, and issues faced. All code is embedded directly in this README for simplicity.
+This project is a comprehensive journey through RISC-V bare-metal programming, completed as part of VSD-SoC-Labs Week 1, Sunday, June 08, 2025. It consists of 17 tasks that progressively build skills in RISC-V development, from toolchain setup to advanced low-level programming concepts. The objectives include setting up the RISC-V toolchain, writing and compiling C programs, debugging, and exploring architecture-specific features like atomic instructions and endianness. Key achievements include:
+
+- **Toolchain Setup**: Installed and verified the RISC-V GCC toolchain on Ubuntu 24.04 LTS (Task 1).
+- **Program Compilation**: Compiled a simple "Hello, RISC-V!" C program into an ELF file (Task 2).
+- **Assembly and Disassembly**: Converted C to assembly, disassembled ELFs, and analyzed hex dumps (Tasks 3, 4).
+- **Debugging and ABI**: Documented the RV32 ABI, debugged programs using GDB and QEMU, and inspected registers (Tasks 5, 6).
+- **Bare-Metal Execution**: Ran bare-metal programs on QEMU with OpenSBI, implementing UART output (Task 7).
+- **Optimization and Inline Assembly**: Analyzed GCC optimization effects and measured execution time with inline assembly (Tasks 8, 9).
+- **I/O and Linking**: Demonstrated memory-mapped I/O, crafted linker scripts, and explained startup code (Tasks 10, 11, 12).
+- **Interrupts and Atomics**: Enabled timer interrupts, implemented a mutex with atomic instructions, and compared RV32IMAC vs RV32IMC (Tasks 13, 14, 15).
+- **Advanced Features**: Retargeted Newlib printf for UART output and verified RV32’s little-endian nature using a union trick (Tasks 16, 17).
+
+The project targets the RV32IMAC architecture, using QEMU’s virt machine for emulation, and provides a solid foundation for understanding RISC-V bare-metal development.
 
 ## 📊SUMMARY TABLE
 | Task No | Title                              | Status    | One-line Summary                                      |
