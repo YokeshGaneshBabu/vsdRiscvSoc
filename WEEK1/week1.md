@@ -4,8 +4,7 @@
 
 🗓️ **Date & Time:** 06:24 PM IST, Sunday, June 08, 2025  
 💻 **Platform:** Ubuntu 24.04 LTS  
-📊 **Progress:** <image-card alt="Progress" src="https://progress-bar.dev/100/" ></image-card>
-
+📊 **Progress:** Completed
 ## 📋 Overview
 
 This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC-V toolchain, C-to-assembly translation, disassembly, ABI understanding, GDB debugging, bare-metal execution with QEMU and OpenSBI, inline assembly for performance measurement, memory-mapped I/O for GPIO toggling, linker script implementation, start-up code analysis, interrupt handling, and ISA extension comparison. Each task includes commands, code, detailed explanations, and issues faced. All code is embedded directly in this README for simplicity.
@@ -29,7 +28,7 @@ This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC
 
 ## 📦 Task 1: Toolchain Installation & Verification
 
-**Status:** <image-card alt="Completed" src="https://img.shields.io/badge/Status-Completed-green" ></image-card>
+**Status:** Completed
 
 ### Objective
 Install and verify the RISC-V GNU toolchain to enable compiling and debugging RISC-V programs on a 32-bit RISC-V architecture.
@@ -98,10 +97,9 @@ Explanation: Compiles the C code into an ELF file (hello.elf), a common format f
     file hello.elf
 Explanation: The file command checks the type of the compiled binary, confirming it’s a 32-bit RISC-V ELF executable.
 
-⚠️ **Issues Faced**
-- No Output: Expected since there’s no UART setup yet; the program compiles but doesn’t display output.
-
 ✅ **Status**
 Completed: Program successfully compiled and verified as a 32-bit RISC-V ELF.
+
+
 
 
