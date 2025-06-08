@@ -67,8 +67,8 @@ Explanation: Confirms that the gcc compiler, gdb debugger, and objdump disassemb
 -gdb Not Found: The PATH was initially incorrect; fixed by sourcing .bashrc after updating.
 
 ✅ **Status**
-Completed: Toolchain successfully installed and verified.
-Issues Resolved: All issues (glibc mismatch, libpython, PATH) were fixed, and the setup is fully functional.
+-Completed: Toolchain successfully installed and verified.
+-Issues Resolved: All issues (glibc mismatch, libpython, PATH) were fixed, and the setup is fully functional.
 
 ## 👋 Task 2: Compiling a RISC-V C Program
 
@@ -82,7 +82,7 @@ Write, compile, and verify a simple "Hello, RISC-V!" C program to test the toolc
 - **Platform**: Ubuntu 24.04 LTS, providing the environment for compilation and verification.
 
   ### 📄 Code
-   ```bash
+  ```bash
    #include <stdio.h>
    int main() {
        printf("Hello, RISC-V!\n");
