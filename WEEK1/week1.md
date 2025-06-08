@@ -74,7 +74,7 @@ Explanation: Confirms that the gcc compiler, gdb debugger, and objdump disassemb
 - **Issues Resolved:** All issues (glibc mismatch, libpython, PATH) were fixed, and the setup is fully functional.
 
 ## 📸 Screenshots for Task 1:
-      ![Screenshot](images/task1_1.png)
+   ![Screenshot](images/task1_1.png)
 ## 👋 Task 2: Compiling a RISC-V C Program
 
 **Status:** Completed
