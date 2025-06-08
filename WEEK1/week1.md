@@ -1043,3 +1043,201 @@ Explanation: A visual comparison of RV32IMC and RV32IMAC.
 
 ✅ **Status**
 Completed: Explained the ‘A’ extension, its instructions, and their importance.
+
+## 🔒 Task 15: Atomic Test Program
+
+**Status:** Completed
+
+### Objective
+Provide a two-thread mutex example (pseudo-threads in main) using lr/sc on RV32.
+
+### 🏛️ Architecture & Platform
+- **Architecture**: RISC-V RV32IMAC. Uses the atomic extension (A) for lr.w and sc.w instructions to implement a mutex.
+- **Platform**: Ubuntu 24.04 LTS, running QEMU for bare-metal simulation.
+
+### 📄 Code: task15.c
+
+      #define UART_TX 0x10000000    // UART transmit register (QEMU virt)
+      #define UART_READY 0x10000005 // UART status register (bit 5 = TX ready)
+      
+      // Define uint32_t for bare-metal
+      typedef unsigned int uint32_t;
+      
+      // Shared counter and mutex
+      volatile uint32_t shared_counter = 0;
+      volatile uint32_t mutex = 0; // 0 = unlocked, 1 = locked
+      
+      void uart_putc(char c) {
+          volatile char* uart_tx = (volatile char*)UART_TX;
+          volatile char* uart_ready = (volatile char*)UART_READY;
+          while (!(*uart_ready & (1 << 5))); // Wait for TXFIFO empty
+          *uart_tx = c;
+      }
+      
+      void uart_puts(const char* s) {
+          while (*s) {
+              uart_putc(*s++);
+          }
+      }
+      
+      // Mutex lock using lr.w/sc.w
+      int mutex_lock(volatile uint32_t* mutex) {
+          uint32_t tmp;
+          do {
+              // Load-reserved
+              asm volatile ("lr.w %0, (%1)" : "=r"(tmp) : "r"(mutex));
+              if (tmp != 0) continue; // Mutex already locked, retry
+              // Store-conditional (try to set mutex to 1)
+              asm volatile ("sc.w %0, %2, (%1)" : "=r"(tmp) : "r"(mutex), "r"(1));
+          } while (tmp != 0); // Retry if sc.w failed
+          return 0;
+      }
+      
+      // Mutex unlock
+      void mutex_unlock(volatile uint32_t* mutex) {
+          *mutex = 0; // Non-atomic write is safe as lock holder
+      }
+      
+      // Thread 1: Increment counter in critical section
+      void thread1(void) {
+          mutex_lock(&mutex);
+          uart_puts("T1: Enter critical section\n");
+          shared_counter++;
+          uart_puts("T1: Counter = ");
+          uart_putc('0' + shared_counter);
+          uart_putc('\n');
+          mutex_unlock(&mutex);
+          uart_puts("T1: Exit critical section\n");
+      }
+      
+      // Thread 2: Same as Thread 1
+      void thread2(void) {
+          mutex_lock(&mutex);
+          uart_puts("T2: Enter critical section\n");
+          shared_counter++;
+          uart_puts("T2: Counter = ");
+          uart_putc('0' + shared_counter);
+          uart_putc('\n');
+          mutex_unlock(&mutex);
+          uart_puts("T2: Exit critical section\n");
+      }
+      
+      int main() {
+          uart_putc('A'); // Debug: program start
+          uart_puts("Starting threads\n");
+      
+          // Simulate two threads by interleaving
+          thread1(); // T1 runs first
+          thread2(); // T2 runs second
+          thread1(); // T1 again
+          thread2(); // T2 again
+      
+          uart_puts("Done\n");
+          while (1) {
+              uart_putc('.'); // Show running
+              for (volatile int i = 0; i < 100000; i++);
+          }
+          return 0;
+      }
+Explanation: Implements a spin-lock mutex using lr.w and sc.w, simulating two threads by interleaving thread1 and thread2 calls.
+
+### 📄 Linker Script: Linker15.ld
+      OUTPUT_ARCH(riscv)
+      ENTRY(_start)
+      
+      MEMORY
+      {
+      FLASH (rx) : ORIGIN = 0x80000000, LENGTH = 16M
+      RAM   (rw) : ORIGIN = 0x81000000, LENGTH = 16M
+      }
+      
+      SECTIONS
+      {
+      .text : {
+      *(.text.start)
+      *(.text)
+      (.text.)
+      } > FLASH
+      
+      .rodata : ALIGN(4) {
+      *(.rodata)
+      (.rodata.)
+      } > FLASH
+      
+      .data : ALIGN(4) {
+      *(.data)
+      (.data.)
+      } > RAM AT > FLASH
+      
+      .bss : ALIGN(4) {
+      *(.bss)
+      (.bss.)
+      } > RAM
+      
+      _end = .;
+      }
+Explanation: Defines memory layout for FLASH and RAM, placing sections appropriately.
+
+### 📄Startup15.s
+.section .text.start
+.global _start
+_start:
+    # Initialize stack pointer
+    la sp, _stack_top
+
+    # Early UART output
+    li t0, 0x10000005
+    li t1, 0x20  # Bit 5
+wait_uart:
+    lb t2, 0(t0)
+    and t2, t2, t1
+    beq t2, zero, wait_uart
+    li t0, 0x10000000
+    li t1, 'S'   # Print 'S'
+    sb t1, 0(t0)
+
+    # Jump to main
+    jal main
+    j .
+
+.section .bss
+.align 4
+.space 1024
+_stack_top:
+Explanation: Sets up the stack pointer, waits for UART to be ready, prints an 'S', and jumps to main.
+
+### 🔧 Commands
+      riscv32-unknown-elf-gcc -g -O0 -march=rv32imac -mabi=ilp32 -nostdlib -T Linker15.ld -o task15.elf task15.c Startup15.s
+      qemu-system-riscv32 -nographic -machine virt -bios none -kernel task15.elf
+Explanation:  
+- Compiles the program with the RV32IMAC architecture to enable atomic instructions.  
+- Runs the program on QEMU without OpenSBI.
+
+### 💬 Output
+      SAStarting threads
+      T1: Enter critical section
+      T1: Counter = 1
+      T1: Exit critical section
+      T2: Enter critical section
+      T2: Counter = 2
+      T2: Exit critical section
+      T1: Enter critical section
+      T1: Counter = 3
+      T1: Exit critical section
+      T2: Enter critical section
+      T2: Counter = 4
+      T2: Exit critical section
+      Done
+      ........
+
+Explanation: Shows the interleaved execution of thread1 and thread2, with the shared counter incrementing safely due to the mutex.
+
+⚠️ **Issues Faced**
+- Mutex Not Working Initially: Incorrect lr.w/sc.w usage caused infinite loops; fixed by ensuring proper retry logic in mutex_lock.
+- UART Output Garbled: Missing newline characters caused output to merge; fixed by adding uart_putc('\n').
+
+✅ **Status**
+Completed: Successfully implemented a mutex using lr.w/sc.w, simulated two threads, and verified safe counter increments.
+
+## 📸 Screenshots for Task 15:
+
