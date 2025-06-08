@@ -90,13 +90,13 @@ Write, compile, and verify a simple "Hello, RISC-V!" C program to test the toolc
    }
 Explanation: This program tests the toolchain by printing a message. Since we’re targeting a bare-metal environment, stdio.h functions like printf may not output directly without UART setup (addressed in later tasks). The focus here is on successful compilation.
 
-   ### 🔧 Compile
-    ```bash
+    ### 🔧 Compile
+    
     riscv32-unknown-elf-gcc -o hello.elf hello.c
 Explanation: Compiles the C code into an ELF file (hello.elf), a common format for RISC-V bare-metal programs.
 
    ### 🔍 Verify ELF
-    ```bash
+    
     file hello.elf
 Explanation: The file command checks the type of the compiled binary, confirming it’s a 32-bit RISC-V ELF executable.
 
