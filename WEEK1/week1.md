@@ -1261,3 +1261,200 @@ Completed: Successfully implemented a mutex using lr.w/sc.w, simulated two threa
 
 ## 📸 Screenshots for Task 15:
 
+## 🖨️ Task 16: Using Newlib printf Without an OS
+
+**Status:** Completed
+
+### Objective
+Retarget _write so that printf sends bytes to a memory-mapped UART in a bare-metal environment.
+
+### 🏛️ Architecture & Platform
+- **Architecture**: RISC-V RV32IMAC. Uses base integer instructions (I) and the Newlib library for printf.
+- **Platform**: Ubuntu 24.04 LTS, running QEMU for bare-metal simulation.
+
+### 📄 Code: Task16.c
+      #include <stdio.h>
+      #include <errno.h>
+      #include <sys/stat.h>
+      #include <sys/types.h>
+      
+      #define UART_TX 0x10000000    // UART transmit register (QEMU virt)
+      #define UART_READY 0x10000005 // UART status register (bit 5 = TX ready)
+      
+      // UART write function
+      void uart_putc(char c) {
+          volatile char* uart_tx = (volatile char*)UART_TX;
+          volatile char* uart_ready = (volatile char*)UART_READY;
+          while (!(*uart_ready & (1 << 5))); // Wait for TXFIFO empty
+          *uart_tx = c;
+      }
+      
+      // Retarget _write for printf
+      int _write(int fd, const char *buf, unsigned int len) {
+          if (fd != 1 && fd != 2) return -1; // Only handle stdout/stderr
+          for (unsigned int i = 0; i < len; i++) {
+              uart_putc(buf[i]);
+          }
+          return len;
+      }
+      
+      // Minimal system call stubs
+      int _close(int fd) {
+          errno = EBADF;
+          return -1;
+      }
+      
+      off_t _lseek(int fd, off_t offset, int whence) {
+          errno = ESPIPE;
+          return -1;
+      }
+      
+      int _read(int fd, char *buf, unsigned int len) {
+          errno = EBADF;
+          return -1;
+      }
+      
+      int _fstat(int fd, struct stat *buf) {
+          if (fd == 1 || fd == 2) {
+              buf->st_mode = S_IFCHR; // Character device for stdout/stderr
+              return 0;
+          }
+          errno = EBADF;
+          return -1;
+      }
+      
+      int _isatty(int fd) {
+          if (fd == 1 || fd == 2) return 1; // stdout/stderr are terminals
+          errno = EBADF;
+          return 0;
+      }
+      
+      void *_sbrk(int incr) {
+          extern char _end; // Defined in linker.ld
+          static char *heap_end = 0;
+          char *prev_heap_end;
+      
+          if (heap_end == 0) heap_end = &_end;
+      
+          prev_heap_end = heap_end;
+          heap_end += incr;
+      
+          // Simple check to avoid heap overflow (adjust as needed)
+          if (heap_end > (char*)0x81010000) { // Limit heap to 64KB
+              errno = ENOMEM;
+              return (void*)-1;
+          }
+          return prev_heap_end;
+      }
+      
+      void _exit(int status) {
+          while (1); // Hang on exit
+      }
+      
+      int _kill(pid_t pid, int sig) {
+          errno = EINVAL;
+          return -1;
+      }
+      
+      pid_t _getpid(void) {
+          return 1; // Single process
+      }
+      
+      int main() {
+          uart_putc('A'); // Direct UART test
+          printf("Hello, RISC-V! Counter: %d\n", 42); // Test printf
+          while (1) {
+              uart_putc('.');
+              for (volatile int i = 0; i < 100000; i++);
+          }
+          return 0;
+      }
+Explanation: Retargets Newlib's printf by implementing _write to send output to UART, with minimal system call stubs for bare-metal compatibility.
+
+### 📄Linker16.ld
+      OUTPUT_ARCH(riscv)
+      ENTRY(_start)
+      
+      MEMORY
+      {
+      FLASH (rx) : ORIGIN = 0x80000000, LENGTH = 16M
+      RAM   (rw) : ORIGIN = 0x81000000, LENGTH = 16M
+      }
+      
+      SECTIONS
+      {
+      .text : {
+      *(.text.start)
+      *(.text)
+      (.text.)
+      } > FLASH
+      
+      .rodata : ALIGN(4) {
+      *(.rodata)
+      (.rodata.)
+      } > FLASH
+      
+      .data : ALIGN(4) {
+      *(.data)
+      (.data.)
+      } > RAM AT > FLASH
+      
+      .bss : ALIGN(4) {
+      *(.bss)
+      (.bss.)
+      } > RAM
+      
+      _end = .;
+      }
+Explanation: Defines memory layout for FLASH and RAM, with _end symbol for heap management.
+
+### 📄Startup16.s
+      .section .text.start
+      .global _start
+      _start:
+          # Initialize stack pointer
+          la sp, _stack_top
+      
+          # Early UART output
+          li t0, 0x10000005
+          li t1, 0x20  # Bit 5
+      wait_uart:
+          lb t2, 0(t0)
+          and t2, t2, t1
+          beq t2, zero, wait_uart
+          li t0, 0x10000000
+          li t1, 'S'   # Print 'S'
+          sb t1, 0(t0)
+      
+          # Jump to main
+          jal main
+          j .
+      
+      .section .bss
+      .align 4
+      .space 1024
+      _stack_top:
+Explanation: Sets up the stack pointer, waits for UART to be ready, prints an 'S', and jumps to main.
+
+### 🔧 Commands
+      riscv32-unknown-elf-gcc -g -O0 -march=rv32imac -mabi=ilp32 -nostdlib -nostartfiles -T Linker16.ld -o task16.elf Task16.c Startup16.s
+      qemu-system-riscv32 -nographic -machine virt -bios none -kernel task16.elf
+Explanation:  
+- Compiles with -nostdlib and -nostartfiles to avoid standard startup and library code, linking custom syscalls.  
+- Runs the program on QEMU without OpenSBI.
+
+### 💬 Output
+      SAHello, RISC-V! Counter: 42
+      ........
+Explanation: Shows the direct UART output ('A'), printf output via _write, and a running indicator.
+
+⚠️ **Issues Faced**
+- No Output Initially: Missing _fstat and _isatty stubs caused printf to fail; added stubs to fix.
+- Heap Overflow: Initial _sbrk lacked bounds checking; added a 64KB limit to prevent crashes.
+
+✅ **Status**
+Completed: Successfully retargeted Newlib printf to UART by implementing _write and necessary syscalls.
+
+## 📸 Screenshots for Task 16:
+
+
