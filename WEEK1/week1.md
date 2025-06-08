@@ -2,11 +2,10 @@
 
 🌟 **Goal:** Set up a RISC-V environment, compile and analyze C programs, explore the ABI, debug with GDB, boot bare-metal ELF on QEMU, use inline assembly, perform memory-mapped I/O, implement a custom linker script, understand start-up code, handle interrupts, and compare RV32IMAC vs RV32IMC.
 
-🗓️ **Date & Time:** 06:24 PM IST, Sunday, June 08, 2025  
+🗓️ **Date & Time:** Sunday, June 08, 2025  
 💻 **Platform:** Ubuntu 24.04 LTS  
-📊 **Progress:** 14/17
+📊 **Progress:** 16/17
 ## 📋 Overview
-
 This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC-V toolchain, C-to-assembly translation, disassembly, ABI understanding, GDB debugging, bare-metal execution with QEMU and OpenSBI, inline assembly for performance measurement, memory-mapped I/O for GPIO toggling, linker script implementation, start-up code analysis, interrupt handling, and ISA extension comparison. Each task includes commands, code, detailed explanations, and issues faced. All code is embedded directly in this README for simplicity.
 
 ## 📊SUMMARY TABLE
