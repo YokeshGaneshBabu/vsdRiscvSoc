@@ -1468,7 +1468,9 @@ Explanation: Defines memory layout for FLASH and RAM, with _end symbol for heap 
 Explanation: Sets up the stack pointer, waits for UART to be ready, prints an 'S', and jumps to main.
 
 ### 🔧 Commands
-      riscv32-unknown-elf-gcc -g -O0 -march=rv32imac -mabi=ilp32 -nostdlib -nostartfiles -T Linker16.ld -o task16.elf Task16.c Startup16.s
+      riscv32-unknown-elf-gcc -march=rv32imc -mabi=ilp32 -c startup16.s startup16.o
+      riscv32-unknown-elf-gcc -march=rv32imc -mabi=ilp32 -c task16.c -o task16.o
+      riscv32-unknown-elf-gcc -march=rv32imc -mabi=ilp32 -nostartfiles -T linker16.ld startup16.o task16.o -o task16.1lf
       qemu-system-riscv32 -nographic -machine virt -bios none -kernel task16.elf
 Explanation:  
 - Compiles with -nostdlib and -nostartfiles to avoid standard startup and library code, linking custom syscalls.  
@@ -1674,9 +1676,10 @@ Explanation: Defines memory layout for FLASH and RAM, placing sections appropria
 Explanation: Sets up the stack pointer and jumps to main, with a simple infinite loop if main returns.
 
 ### 🔧 Commands
-
-      riscv32-unknown-elf-gcc -g -O0 -march=rv32imac -mabi=ilp32 -nostdlib -T Linker17.ld -o task17.elf Task17.c Startup17.s
-      qemu-system-riscv32 -nographic -machine virt -bios none -kernel task17.elf
+      riscv32-unknown-elf-gcc -c task17.c -o task17.o -march=rv32imac -mabi=ilp32 -Os
+      riscv32-unknown-elf-gcc -c startup17.s -o startup17.o -marxh=rv32imac -mabi=ilp32
+      riscv32-unknown-elf-gcc -c startup17.s -o task17.elf task17.o startup17.o -march=rv32imac -mabi=ilp32 -lc -lgcc
+      qemu-system-riscv32 -M virt -bios none -kernel task17.elf -nographic -bios none
 Explanation:  
 - Compiles the program for RV32IMAC with no standard library.  
 - Runs the program on QEMU without OpenSBI.
