@@ -2,7 +2,7 @@
 
 🌟 **Goal:** Set up a RISC-V environment, compile and analyze C programs, explore the ABI, debug with GDB, boot bare-metal ELF on QEMU, use inline assembly, perform memory-mapped I/O, implement a custom linker script, understand start-up code, handle interrupts, and compare RV32IMAC vs RV32IMC.
 
-🗓️ **Date & Time:** Sunday, June 08, 2025  
+🗓️ **Date:** Sunday, June 08, 2025  
 💻 **Platform:** Ubuntu 24.04 LTS  
 📊 **Progress:** 16/17
 ## 📋 Overview
@@ -27,7 +27,7 @@ This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC
 | 14      | RV32IMAC vs RV32IMC – What’s the “A”? | Completed | Explained RV32IMAC’s atomic extension (A) and its uses. |
 | 15      | Atomic Test Program                | Completed | Implemented a mutex using lr.w/sc.w for thread safety. |
 | 16      | Using Newlib printf Without an OS  | Completed | Retargeted Newlib printf to UART with custom _write.  |
-
+| 17      | Endianness & Struct Packing        | Completed | Verified RV32 is little-endian using a union trick.   |
 
 ## 📦 Task 1: Toolchain Installation & Verification
 
