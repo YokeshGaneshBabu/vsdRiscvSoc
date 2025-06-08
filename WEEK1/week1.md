@@ -1477,3 +1477,219 @@ Completed: Successfully retargeted Newlib printf to UART by implementing _write 
 ## 📸 Screenshots for Task 16:
    ![Screenshot](images/task16.png)
 
+## 🔄 Task 17: Endianness & Struct Packing
+
+**Status:** Completed
+
+### Objective
+Verify if RV32 is little-endian by default using a union trick in C to check byte ordering.
+
+### 🏛️ Architecture & Platform
+- **Architecture**: RISC-V RV32IMAC. Focuses on byte ordering in memory for RV32.
+- **Platform**: Ubuntu 24.04 LTS, running QEMU for bare-metal simulation.
+
+### 📄 Code: Task17.c
+      
+      #include <stdint.h> // For uint32_t and uint8_t
+      
+      // --- UART Register Definitions for QEMU virt machine ---
+      #define UART_TX 0x10000000
+      #define UART_READY 0x10000005
+      
+      // --- Custom UART Functions ---
+      void uart_putc(char c) {
+          volatile char* uart_tx = (volatile char*)UART_TX;
+          volatile char* uart_ready = (volatile char*)UART_READY;
+          while (!(*uart_ready & (1 << 5)));
+          *uart_tx = c;
+      }
+      
+      void uart_puts(const char* s) {
+          while (*s) {
+              uart_putc(*s++);
+          }
+      }
+      
+      // --- Helper Functions for Printing Numbers ---
+      void uart_put_hex_byte(uint8_t byte) {
+          char hex_digits[] = "0123456789ABCDEF";
+          uart_putc('0');
+          uart_putc('x');
+          uart_putc(hex_digits[(byte >> 4) & 0xF]);
+          uart_putc(hex_digits[byte & 0xF]);
+      }
+      
+      void uart_put_hex_u32(uint32_t val) {
+          char hex_digits[] = "0123456789ABCDEF";
+          uart_putc('0');
+          uart_putc('x');
+          for (int i = 7; i >= 0; i--) {
+              uart_putc(hex_digits[(val >> (i * 4)) & 0xF]);
+          }
+      }
+      
+      void uart_put_int(int num) {
+          if (num == 0) {
+              uart_putc('0');
+              return;
+          }
+      
+          char buf[12];
+          int i = 0;
+          int is_negative = 0;
+      
+          if (num < 0) {
+              is_negative = 1;
+              num = -num;
+          }
+      
+          while (num > 0) {
+              buf[i++] = '0' + (num % 10);
+              num /= 10;
+          }
+      
+          if (is_negative) {
+              uart_putc('-');
+          }
+      
+          while (i > 0) {
+              uart_putc(buf[--i]);
+          }
+      }
+      
+      // --- Main Program Entry Point ---
+      int main() {
+          volatile int x = 42;
+          x = x + 1;
+      
+          uart_puts("--------------------------------\n");
+          uart_puts("Bare-metal RISC-V Application\n");
+          uart_puts("Value of x: ");
+          uart_put_int(x);
+          uart_puts("\n");
+          uart_puts("--------------------------------\n\n");
+      
+          // --- Endianness Check Using a Union ---
+          union {
+              uint32_t value;
+              uint8_t bytes[4];
+          } endian_check;
+      
+          endian_check.value = 0x01020304;
+      
+          uart_puts("Verifying Byte Ordering (Endianness):\n");
+          uart_puts("Value stored: ");
+          uart_put_hex_u32(endian_check.value);
+          uart_puts("\n");
+      
+          uart_puts("Bytes in memory (from lowest to highest address):\n");
+          for (int i = 0; i < 4; i++) {
+              uart_puts("Byte ");
+              uart_put_int(i);
+              uart_puts(": ");
+              uart_put_hex_byte(endian_check.bytes[i]);
+              uart_puts("\n");
+          }
+      
+          if (endian_check.bytes[0] == 0x04) {
+              uart_puts("\nThis system is Little-Endian.\n");
+              uart_puts("The least significant byte (0x04) is stored at the lowest memory address.\n");
+          } else if (endian_check.bytes[0] == 0x01) {
+              uart_puts("\nThis system is Big-Endian.\n");
+              uart_puts("The most significant byte (0x01) is stored at the lowest memory address.\n");
+          } else {
+              uart_puts("\nCould not determine endianness (unexpected byte order).\n");
+          }
+      
+          while (1) {
+          }
+      
+          return 0;
+      }
+Explanation: Uses a union to store 0x01020304 and checks byte ordering to determine endianness, printing results via UART.
+
+### 📄Linker17.ld :
+      OUTPUT_ARCH(riscv)
+      ENTRY(_start)
+      
+      MEMORY
+      {
+      FLASH (rx) : ORIGIN = 0x80000000, LENGTH = 16M
+      RAM (rw)   : ORIGIN = 0x81000000, LENGTH = 16M
+      }
+      
+      SECTIONS
+      {
+      . = 0x80000000;
+      
+      .text : {
+      *(.text.start)
+      *(.text)
+      (.text.)
+      } > FLASH
+      
+      .rodata : ALIGN(4) {
+      *(.rodata)
+      (.rodata.)
+      } > FLASH
+      
+      .data : ALIGN(4) {
+      *(.data)
+      (.data.)
+      } > RAM AT > FLASH
+      
+      .bss : ALIGN(4) {
+      *(.bss)
+      (.bss.)
+      } > RAM
+      
+      _end = .;
+      }
+Explanation: Defines memory layout for FLASH and RAM, placing sections appropriately.
+### 📄Startup17.s :
+      .section .text.start
+      .global _start
+      
+      _start:
+          la sp, _stack_top
+          jal main
+          j .
+      
+      .section .bss
+      .align 4
+      .space 1024
+      _stack_top:
+Explanation: Sets up the stack pointer and jumps to main, with a simple infinite loop if main returns.
+
+### 🔧 Commands
+
+      riscv32-unknown-elf-gcc -g -O0 -march=rv32imac -mabi=ilp32 -nostdlib -T Linker17.ld -o task17.elf Task17.c Startup17.s
+      qemu-system-riscv32 -nographic -machine virt -bios none -kernel task17.elf
+Explanation:  
+- Compiles the program for RV32IMAC with no standard library.  
+- Runs the program on QEMU without OpenSBI.
+
+### 💬 Output
+      Bare-metal RISC-V Application Value of x: 43
+      Verifying Byte Ordering (Endianness):
+      Value stored: 0x01020304
+      Bytes in memory (from lowest to highest address):
+      Byte 0: 0x04
+      Byte 1: 0x03
+      Byte 2: 0x02
+      Byte 3: 0x01
+      
+      This system is Little-Endian.
+      The least significant byte (0x04) is stored at the lowest memory address.
+
+Explanation: Confirms RV32 is little-endian by default, as the least significant byte (0x04) is at the lowest address.
+
+⚠️ **Issues Faced**
+- Output Misalignment: Initial output lacked newlines, making it hard to read; added uart_puts("\n") to fix.
+- Union Behavior: Had to ensure no compiler optimizations affected the union; used volatile where needed.
+
+✅ **Status**
+Completed: Verified RV32 is little-endian using a union trick and printed byte ordering via UART.
+
+## 📸 Screenshots for Task 17:
+![Screenshot](images/task17.png)
