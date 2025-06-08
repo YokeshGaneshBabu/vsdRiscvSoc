@@ -981,3 +981,73 @@ Explanation: Compiles and runs the program on QEMU.
       ........MTIP
       ........MTIP
       ........MTIP
+Explanation: Shows the timer interrupt firing periodically.
+
+⚠️ **Issues Faced**
+- Interrupt Not Firing: mie and mstatus bits were initially set incorrectly; fixed with proper CSR writes.
+
+✅ **Status**
+Completed: Successfully enabled and handled MTIP with a simple handler.
+
+## 🧬 Task 14: RV32IMAC vs RV32IMC – What’s the “A”?
+
+**Status:** Completed
+
+### Objective
+Explain the ‘A’ (atomic) extension in RV32IMAC, its instructions, and their usefulness.
+
+### 🏛️ Architecture & Platform
+- **Architecture**: RISC-V RV32IMAC vs RV32IMC. Focuses on the atomic extension (A).
+- **Platform**: Ubuntu 24.04 LTS, used for researching and documenting ISA extensions.
+
+### 🔸 Base Comparison: RV32IMC vs RV32IMAC
+| Feature         | RV32IMC | RV32IMAC |
+|-----------------|---------|----------|
+| **I** (Base Integer) | ✅      | ✅       |
+| **M** (Multiply/Divide) | ✅   | ✅       |
+| **C** (Compressed Instr.) | ✅  | ✅       |
+| **A** (Atomic)  | ❌      | ✅       |
+Explanation: Shows the difference between RV32IMC and RV32IMAC.
+
+### 🔸 What is the "A" Extension?
+Explanation: The 'A' extension introduces atomic read-modify-write operations for safe concurrent code in multi-core systems.
+
+### 🔸 Key Atomic Instructions
+| Instruction   | Meaning               | Use Case                          |
+|---------------|-----------------------|-----------------------------------|
+| lr.w        | Load-Reserved         | Starts atomic operation           |
+| sc.w        | Store-Conditional     | Stores if reservation valid       |
+| amoadd.w    | Atomic ADD            | Adds value atomically             |
+| amoswap.w   | Atomic SWAP           | Swaps memory and register values  |
+| amoor.w     | Atomic OR             | Sets flags atomically             |
+| amoand.w    | Atomic AND            | Locks bits                        |
+| amomin.w    | Atomic Min            | Priority/resource arbitration     |
+| amomax.w    | Atomic Max            | Max-tracking use cases            |
+Explanation: Lists the main atomic instructions and their purposes.
+
+### 🔹 Importance of ‘A’
+| Purpose                  | Why It’s Needed                          |
+|--------------------------|------------------------------------------|
+| **Thread-safe Operations** | Allows safe memory sharing              |
+| **Lock-Free Programming** | Enables deadlock-free data structures   |
+| **OS Support**            | Implements mutexes, semaphores, spinlocks |
+| **Multicore Support**     | Synchronizes memory across cores        |
+Explanation: Highlights why the A extension is important.
+
+### 🔸 Visual Summary
+|RV32IMC                         | RV32IMAC                               |
+|
+|Base + Mul/Div + Compressed     | Base + Mul/Div + Compressed + ⚡Atomic|
+
+|❌                             | ✅ Supports:|
+|❌                             | lr.w, sc.w|
+| ❌                            | amoadd.w, amoswap.w|
+| ❌                            |Enables thread-safe systems|
+
+Explanation: A visual comparison of RV32IMC and RV32IMAC.
+
+⚠️ **Issues Faced**
+- Understanding Use Cases: Took time to research atomic instruction applications; clarified via RISC-V specs.
+
+✅ **Status**
+Completed: Explained the ‘A’ extension, its instructions, and their importance.
