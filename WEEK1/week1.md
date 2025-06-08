@@ -1036,7 +1036,7 @@ Explanation: Highlights why the A extension is important.
 
 ### 🔸 Visual Summary
 |RV32IMC                         | RV32IMAC                               |
-|
+|--------------------------------|----------------------------------------|
 |Base + Mul/Div + Compressed     | Base + Mul/Div + Compressed + ⚡Atomic|
 
 |❌                             | ✅ Supports:|
