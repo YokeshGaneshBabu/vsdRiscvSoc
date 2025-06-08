@@ -107,6 +107,7 @@ Explanation: The file command checks the type of the compiled binary, confirming
 Completed: Program successfully compiled and verified as a 32-bit RISC-V ELF.
 
 ## 📸 Screenshots for Task 2:
+   ![Screenshot](images/task2.png)
 
 ## 🔍 Task 3: C to Assembly Conversion
 
@@ -143,6 +144,7 @@ Explanation:
 Completed: Successfully generated and analyzed RISC-V assembly from C code.
 
 ## 📸 Screenshots for Task 3:
+   ![Screenshot](images/task3.png)
 
 ## 🔬 Task 4: Disassembly & Hex Dump
 
@@ -184,6 +186,8 @@ Explanation:
 Completed: Successfully disassembled the ELF and generated binary/hex outputs.
 
 ## 📸 Screenshots for Task 4:
+   ![Screenshot](images/task4_1.png)
+   ![Screenshot](images/task4_2.png)
 
 ## 📚 Task 5: ABI & Register Cheat-Sheet
 
@@ -290,6 +294,10 @@ Explanation: QEMU doesn’t print to UART, but a0 holds the address of "Hello, R
 Completed: Successfully debugged the program using GDB and QEMU, inspecting registers and instructions.
 
 ## 📸 Screenshots for Task 6:
+   ![Screenshot](images/task6_1.png)
+   ![Screenshot](images/task6_2.png)
+   ![Screenshot](images/task6_3.png)
+   ![Screenshot](images/task6_4.png)
 
 ## 🛰️ Task 7: Bare-Metal Execution with QEMU
 
@@ -362,6 +370,9 @@ Explanation:
 Completed: Bare-metal ELF successfully executed with QEMU and OpenSBI, displaying UART output.
 
 ## 📸 Screenshots for Task 7:
+   ![Screenshot](images/task7_1.png)
+   ![Screenshot](images/task7_2.png)
+   ![Screenshot](images/task7_3.png)
 
 ## 🧠 Task 8: GCC Optimization Analysis
 
@@ -411,7 +422,9 @@ Explanation:
 Completed: Successfully compared -O0 and -O2 assembly outputs, highlighting optimization effects.
 
 ## 📸 Screenshots for Task 8:
-
+   ![Screenshot](images/task8_1.png)
+   ![Screenshot](images/task8_2.png)
+   
 ## ⏱️ Task 9: Inline Assembly Basics
 
 **Status:** Completed
@@ -554,6 +567,7 @@ Explanation: Shows the value of x and the cycles taken for the operation.
 Completed: Successfully measured execution time using inline assembly and rdcycle.
 
 ## 📸 Screenshots for Task 9:
+   ![Screenshot](images/task9.png)
 
 ## 🔧 Task 10: Memory-Mapped I/O Demo
 
@@ -664,6 +678,8 @@ Explanation: Confirms the GPIO toggle and UART output.
 Completed: Demonstrated memory-mapped I/O with GPIO toggling, verified via UART output.
 
 ## 📸 Screenshots for Task 10:
+   ![Screenshot](images/task10_1.png)
+   ![Screenshot](images/task10_2.png)
 
 ## 📜 Task 11: Linker Script 101
 
@@ -780,6 +796,7 @@ Explanation: Confirms the memory layout and symbol addresses.
 Completed: Linker script successfully implemented and verified.
 
 ## 📸 Screenshots for Task 11:
+   ![Screenshot](images/task11.png)
 
 ## 🚀 Task 12: Start-up Code & crt0
 
@@ -1004,7 +1021,8 @@ Explanation: Shows the timer interrupt firing periodically.
 Completed: Successfully enabled and handled MTIP with a simple handler.
 
 ## 📸 Screenshots for Task 13:
-
+   ![Screenshot](images/task13_1.png)
+   ![Screenshot](images/task13_2.png)
 ## 🧬 Task 14: RV32IMAC vs RV32IMC – What’s the “A”?
 
 **Status:** Completed
@@ -1456,5 +1474,5 @@ Explanation: Shows the direct UART output ('A'), printf output via _write, and a
 Completed: Successfully retargeted Newlib printf to UART by implementing _write and necessary syscalls.
 
 ## 📸 Screenshots for Task 16:
-
+   ![Screenshot](images/task16.png)
 
