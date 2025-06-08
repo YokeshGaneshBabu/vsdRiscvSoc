@@ -2,15 +2,16 @@
 
 🌟 **Goal:** Set up a RISC-V environment, compile and analyze C programs, explore the ABI, debug with GDB, boot bare-metal ELF on QEMU, use inline assembly, perform memory-mapped I/O, implement a custom linker script, understand start-up code, handle interrupts, and compare RV32IMAC vs RV32IMC.
 
-🗓️ **Date & Time:** 06:07 PM IST, Sunday, June 08, 2025  
+🗓️ **Date & Time:** 06:20 PM IST, Sunday, June 08, 2025  
 💻 **Platform:** Ubuntu 24.04 LTS  
-📊 **Progress:** ![Progress](https://progress-bar.dev/100/)
+📊 **Progress:** <image-card alt="Progress" src="https://progress-bar.dev/21/" ></image-card>  
+*Explanation*: 3 out of 14 tasks completed (21% progress).
 
 ---
 
 ## 📋 Overview
 
-This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC-V toolchain, C-to-assembly translation, disassembly, ABI understanding, GDB debugging, bare-metal execution with QEMU and OpenSBI, inline assembly for performance measurement, memory-mapped I/O for GPIO toggling, linker script implementation, start-up code analysis, interrupt handling, and ISA extension comparison. Each task includes commands, code, detailed explanations, issues faced, and screenshot galleries for visual proof. All code is embedded directly in this README for simplicity.
+This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC-V toolchain, C-to-assembly translation, disassembly, ABI understanding, GDB debugging, bare-metal execution with QEMU and OpenSBI, inline assembly for performance measurement, memory-mapped I/O for GPIO toggling, linker script implementation, start-up code analysis, interrupt handling, and ISA extension comparison. This section covers Tasks 1 to 3, with more tasks to be added soon. Each task includes commands, code, detailed explanations, issues faced, and screenshot galleries for visual proof. All code is embedded directly in this README for simplicity.
 
 ---
 
@@ -19,17 +20,191 @@ This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC
 - [Task 1: Toolchain Installation & Verification](#task-1-toolchain-installation--verification)
 - [Task 2: Compiling a RISC-V C Program](#task-2-compiling-a-risc-v-c-program)
 - [Task 3: C to Assembly Conversion](#task-3-c-to-assembly-conversion)
-- [Task 4: Disassembly & Hex Dump](#task-4-disassembly--hex-dump)
-- [Task 5: ABI & Register Cheat-Sheet](#task-5-abi--register-cheat-sheet)
-- [Task 6: Debugging with GDB](#task-6-debugging-with-gdb)
-- [Task 7: Bare-Metal Execution with QEMU](#task-7-bare-metal-execution-with-qemu)
-- [Task 8: GCC Optimization Analysis](#task-8-gcc-optimization-analysis)
-- [Task 9: Inline Assembly Basics](#task-9-inline-assembly-basics)
-- [Task 10: Memory-Mapped I/O Demo](#task-10-memory-mapped-io-demo)
-- [Task 11: Linker Script 101](#task-11-linker-script-101)
-- [Task 12: Start-up Code & crt0](#task-12-start-up-code--crt0)
-- [Task 13: Interrupt Primer](#task-13-interrupt-primer)
-- [Task 14: RV32IMAC vs RV32IMC – What’s the “A”?](#task-14-rv32imac-vs-rv32imc--whats-the-a)
 
 ---
 
+## 📦 Task 1: Toolchain Installation & Verification
+
+**Status:** <image-card alt="Completed" src="https://img.shields.io/badge/Status-Completed-green" ></image-card>
+
+<details>
+<summary>🎯 Expand to View Task Details</summary>
+
+### Objective
+Install and verify the RISC-V GNU toolchain to enable compiling and debugging RISC-V programs on a 32-bit RISC-V architecture.
+
+### 🏛️ Architecture & Platform
+- **Architecture**: RISC-V RV32IMC (32-bit base integer, multiply/divide, compressed instructions). This architecture provides a lightweight instruction set for embedded systems, with compressed instructions (C) reducing code size.
+- **Platform**: Ubuntu 24.04 LTS, a stable Linux distribution, used for hosting the toolchain and running QEMU for emulation.
+
+### 🔧 Steps
+The goal is to set up the RISC-V GNU toolchain, which includes the compiler (`gcc`), debugger (`gdb`), and utilities (`objdump`, `objcopy`).
+
+1. **Download and Extract the Prebuilt Toolchain**:
+   ```bash
+   wget https://vsd-labs.sgp1.cdn.digitaloceanspaces.com/vsd-labs/riscv-toolchain-rv32imac-x86_64-Ubuntu.tar.gz
+   tar -xzvf riscv-toolchain-rv32imac-x86_64-Ubuntu.tar.gz
+   mv riscv $HOME/riscv
+Explanation: Downloads a prebuilt toolchain for RV32IMAC, extracts it, and moves it to $HOME/riscv for easy access.
+
+Update the PATH Environment Variable:
+bash
+
+Collapse
+
+Wrap
+
+Run
+
+Copy
+echo 'export PATH=$HOME/riscv/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+Explanation: Adds the toolchain binaries to the system PATH, ensuring tools like riscv32-unknown-elf-gcc are accessible from the terminal.
+Verify the Installation:
+bash
+
+Collapse
+
+Wrap
+
+Run
+
+Copy
+riscv32-unknown-elf-gcc --version
+riscv32-unknown-elf-gdb --version
+riscv32-unknown-elf-objdump --version
+Explanation: Confirms that the gcc compiler, gdb debugger, and objdump disassembler are installed. The prefix riscv32-unknown-elf indicates the target (32-bit RISC-V, ELF format for bare-metal).
+⚠️ Issues Faced
+glibc Mismatch: The toolchain required a compatible glibc version, resolved by switching to Ubuntu 24.04.
+Missing libpython: Some tools depend on Python libraries, fixed by installing via the deadsnakes PPA.
+gdb Not Found: The PATH was initially incorrect; fixed by sourcing .bashrc after updating.
+📸 Screenshots
+Toolchain version output:
+Failed to load image
+
+View link
+PATH setup confirmation:
+Failed to load image
+
+View link
+glibc issue debug log:
+Failed to load image
+
+View link
+✅ Status
+Completed: Toolchain successfully installed and verified.
+Issues Resolved: All issues (glibc mismatch, libpython, PATH) were fixed, and the setup is fully functional.
+👋 Task 2: Compiling a RISC-V C Program
+Status: 
+
+
+🎯 Expand to View Task Details
+Objective
+Write, compile, and verify a simple "Hello, RISC-V!" C program to test the toolchain.
+
+🏛️ Architecture & Platform
+Architecture: RISC-V RV32IMC. The base integer instructions (I) handle basic operations, while compressed instructions (C) optimize for smaller code size.
+Platform: Ubuntu 24.04 LTS, providing the environment for compilation and verification.
+📄 Code
+c
+
+Collapse
+
+Wrap
+
+Run
+
+Copy
+#include <stdio.h>
+int main() {
+    printf("Hello, RISC-V!\n");
+    return 0;
+}
+Explanation: This program tests the toolchain by printing a message. Since we’re targeting a bare-metal environment, stdio.h functions like printf may not output directly without UART setup (addressed in later tasks). The focus here is on successful compilation.
+
+🔧 Compile
+bash
+
+Collapse
+
+Wrap
+
+Run
+
+Copy
+riscv32-unknown-elf-gcc -o hello.elf hello.c
+Explanation: Compiles the C code into an ELF file (hello.elf), a common format for RISC-V bare-metal programs.
+
+🔍 Verify ELF
+bash
+
+Collapse
+
+Wrap
+
+Run
+
+Copy
+file hello.elf
+Explanation: The file command checks the type of the compiled binary, confirming it’s a 32-bit RISC-V ELF executable.
+
+⚠️ Issues Faced
+No Output: Expected since there’s no UART setup yet; the program compiles but doesn’t display output.
+📸 Screenshots
+Compilation output:
+Failed to load image
+
+View link
+ELF verification:
+Failed to load image
+
+View link
+✅ Status
+Completed: Program successfully compiled and verified as a 32-bit RISC-V ELF.
+🔍 Task 3: C to Assembly Conversion
+Status: 
+
+
+🎯 Expand to View Task Details
+🎯 Summary
+Through these tasks, I:
+
+Installed and verified the RISC-V toolchain.
+Compiled and disassembled a C program.
+Converted C code to RISC-V assembly for analysis.
+More tasks (4–14) will be added in subsequent updates.
+
+📸 Screenshots
+All screenshots are stored in the screenshots/ folder, organized by task. Upload them to the repository for proper rendering.
+
+Task 1:
+Toolchain version output:
+Failed to load image
+
+View link
+PATH setup confirmation:
+Failed to load image
+
+View link
+glibc issue debug log:
+Failed to load image
+
+View link
+Task 2:
+Compilation output:
+Failed to load image
+
+View link
+ELF verification:
+Failed to load image
+
+View link
+Task 3:
+Assembly file snippet:
+Failed to load image
+
+View link
+Full assembly file:
+Failed to load image
+
+View link
