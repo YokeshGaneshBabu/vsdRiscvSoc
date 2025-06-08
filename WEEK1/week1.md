@@ -81,7 +81,7 @@ Write, compile, and verify a simple "Hello, RISC-V!" C program to test the toolc
 - **Architecture**: RISC-V RV32IMC. The base integer instructions (I) handle basic operations, while compressed instructions (C) optimize for smaller code size.
 - **Platform**: Ubuntu 24.04 LTS, providing the environment for compilation and verification.
 
-  ### 📄 Code
+### 📄 Code
 
       #include <stdio.h>
       int main() {
