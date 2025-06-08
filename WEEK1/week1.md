@@ -1066,6 +1066,7 @@ Explanation: Lists the main atomic instructions and their purposes.
 | **Lock-Free Programming** | Enables deadlock-free data structures   |
 | **OS Support**            | Implements mutexes, semaphores, spinlocks |
 | **Multicore Support**     | Synchronizes memory across cores        |
+
 Explanation: Highlights why the A extension is important.
 
 ### 🔸 Visual Summary
