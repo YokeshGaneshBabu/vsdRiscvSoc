@@ -4,7 +4,7 @@
 
 🗓️ **Date & Time:** 06:24 PM IST, Sunday, June 08, 2025  
 💻 **Platform:** Ubuntu 24.04 LTS  
-📊 **Progress:** Completed
+📊 **Progress:** 14/17
 ## 📋 Overview
 
 This repository documents Week 1 tasks of the VSD SoC Labs, focusing on the RISC-V toolchain, C-to-assembly translation, disassembly, ABI understanding, GDB debugging, bare-metal execution with QEMU and OpenSBI, inline assembly for performance measurement, memory-mapped I/O for GPIO toggling, linker script implementation, start-up code analysis, interrupt handling, and ISA extension comparison. Each task includes commands, code, detailed explanations, and issues faced. All code is embedded directly in this README for simplicity.
