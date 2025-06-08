@@ -535,7 +535,111 @@ Explanation: Uses inline assembly to read the cycle counter and measure a simple
     _end = .;
     }
 Explanation: Defines memory layout for the bare-metal program.
+### 📄 Startup Code
+    .section .text.start
+    .global _start
+    _start:
+       la sp, _stack_top
+       jal main
+       j .
+    .section .bss
+    .align 4
+    .space 1024
+    _stack_top:
+Explanation: Sets up the stack pointer and jumps to main.
 
+### 🔧 Commands
+    riscv32-unknown-elf-gcc -g -O0 -march=rv32im -mabi=ilp32 -nostdlib -T linkertask9.ld -o task9.elf task9.c startuptask_9.s
+    qemu-system-riscv32 -nographic -machine virt -bios none -kernel task9.elf
+    Explanation: Compiles and runs the program on QEMU without OpenSBI.
+ 
+### 💬 Output
+    Value of x: 43
+    Cycles taken: 8410761
 
+Explanation: Shows the value of x and the cycles taken for the operation.
 
+⚠️ **Issues Faced**
+- High Cycle Count: Due to UART overhead; expected for I/O operations.
 
+✅ **Status**
+Completed: Successfully measured execution time using inline assembly and rdcycle.
+
+## 🔧 Task 10: Memory-Mapped I/O Demo
+
+**Status:** Completed
+
+### Objective
+Demonstrate memory-mapped I/O by toggling a GPIO register and prevent compiler optimizations.
+
+### 🏛️ Architecture & Platform
+- **Architecture**: RISC-V RV32IMC. Uses base integer instructions (I) for memory-mapped I/O.
+- **Platform**: Ubuntu 24.04 LTS, running QEMU for bare-metal simulation.
+
+### 📄 Code
+      #define GPIO_OUT 0x10012000
+      #define UART_TX 0x10000000
+      #define UART_READY 0x10000005
+   
+      typedef unsigned int uint32_t;
+   
+      void uart_putc(char c) {
+       volatile char* uart_tx = (volatile char*)UART_TX;
+       volatile char* uart_ready = (volatile char*)UART_READY;
+       while (!(*uart_ready & (1 << 5)));
+       *uart_tx = c;
+      }
+   
+      void uart_puts(const char* s) {
+       while (*s) uart_putc(*s++);
+      }
+   
+      void gpio_toggle(void) {
+       volatile uint32_t* gpio_out = (volatile uint32_t*)GPIO_OUT;
+       *gpio_out |= (1 << 0);
+       *gpio_out &= ~(1 << 0);
+      }
+   
+      int main() {
+       uart_puts("GPIO Toggled\n");
+       gpio_toggle();
+       uart_putc('B');
+       while (1) {
+           uart_putc('.');
+           for (volatile int i = 0; i < 100000; i++);
+          }
+          return 0;
+        }
+Explanation: Toggles a GPIO pin using memory-mapped I/O and outputs via UART.
+### 📄 Linker Script
+
+       OUTPUT_ARCH(riscv)
+      ENTRY(_start)
+      MEMORY
+      {
+      FLASH (rx) : ORIGIN = 0x80000000, LENGTH = 16M
+      RAM (rw)   : ORIGIN = 0x81000000, LENGTH = 16M
+      }
+      SECTIONS
+      {
+      . = 0x80000000;
+      .text : {
+      *(.text.start)
+      *(.text)
+      (.text.)
+      } > FLASH
+      .rodata : ALIGN(4) {
+      *(.rodata)
+      (.rodata.)
+      } > FLASH
+      .data : ALIGN(4) {
+      *(.data)
+      (.data.)
+      } > RAM AT > FLASH
+    .bss : ALIGN(4) {
+    *(.bss)
+    (.bss.)
+    } > RAM
+    _end = .;
+    }
+Explanation: Defines memory layout for the bare-metal program.
