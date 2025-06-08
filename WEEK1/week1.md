@@ -1038,7 +1038,6 @@ Explanation: Highlights why the A extension is important.
 |RV32IMC                         | RV32IMAC                               |
 |--------------------------------|----------------------------------------|
 |Base + Mul/Div + Compressed     | Base + Mul/Div + Compressed + ⚡Atomic|
-
 |❌                             | ✅ Supports:|
 |❌                             | lr.w, sc.w|
 | ❌                            | amoadd.w, amoswap.w|
