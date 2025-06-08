@@ -70,4 +70,40 @@ Explanation: Confirms that the gcc compiler, gdb debugger, and objdump disassemb
 Completed: Toolchain successfully installed and verified.
 Issues Resolved: All issues (glibc mismatch, libpython, PATH) were fixed, and the setup is fully functional.
 
+## 👋 Task 2: Compiling a RISC-V C Program
+
+**Status:** Completed
+
+### Objective
+Write, compile, and verify a simple "Hello, RISC-V!" C program to test the toolchain.
+
+### 🏛️ Architecture & Platform
+- **Architecture**: RISC-V RV32IMC. The base integer instructions (I) handle basic operations, while compressed instructions (C) optimize for smaller code size.
+- **Platform**: Ubuntu 24.04 LTS, providing the environment for compilation and verification.
+
+  ### 📄 Code
+   ```bash
+   #include <stdio.h>
+   int main() {
+       printf("Hello, RISC-V!\n");
+    return 0;
+   }
+Explanation: This program tests the toolchain by printing a message. Since we’re targeting a bare-metal environment, stdio.h functions like printf may not output directly without UART setup (addressed in later tasks). The focus here is on successful compilation.
+
+   ### 🔧 Compile
+    ```bash
+       riscv32-unknown-elf-gcc -o hello.elf hello.c
+Explanation: Compiles the C code into an ELF file (hello.elf), a common format for RISC-V bare-metal programs.
+
+   ### 🔍 Verify ELF
+    ```bash
+    file hello.elf
+Explanation: The file command checks the type of the compiled binary, confirming it’s a 32-bit RISC-V ELF executable.
+
+⚠️ **Issues Faced**
+- No Output: Expected since there’s no UART setup yet; the program compiles but doesn’t display output.
+
+✅ **Status**
+Completed: Program successfully compiled and verified as a 32-bit RISC-V ELF.
+
 
