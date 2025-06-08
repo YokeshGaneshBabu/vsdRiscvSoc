@@ -61,10 +61,7 @@ Explanation: Adds the toolchain binaries to the system PATH, ensuring tools like
    riscv32-unknown-elf-gcc --version
    riscv32-unknown-elf-gdb --version
    riscv32-unknown-elf-objdump --version
-4. **Screenshot:**
    
-      ![Screenshot](images/task1_1.png)
-
 Explanation: Confirms that the gcc compiler, gdb debugger, and objdump disassembler are installed. The prefix riscv32-unknown-elf indicates the target (32-bit RISC-V, ELF format for bare-metal).
 
 ⚠️ **Issues Faced**
@@ -76,6 +73,8 @@ Explanation: Confirms that the gcc compiler, gdb debugger, and objdump disassemb
 - **Completed:** Toolchain successfully installed and verified.
 - **Issues Resolved:** All issues (glibc mismatch, libpython, PATH) were fixed, and the setup is fully functional.
 
+## 📸 Screenshots for Task 1:
+      ![Screenshot](images/task1_1.png)
 ## 👋 Task 2: Compiling a RISC-V C Program
 
 **Status:** Completed
@@ -106,6 +105,8 @@ Explanation: The file command checks the type of the compiled binary, confirming
 
 ✅ **Status**
 Completed: Program successfully compiled and verified as a 32-bit RISC-V ELF.
+
+## 📸 Screenshots for Task 2:
 
 ## 🔍 Task 3: C to Assembly Conversion
 
@@ -140,6 +141,8 @@ Explanation:
 
 ✅ **Status**
 Completed: Successfully generated and analyzed RISC-V assembly from C code.
+
+## 📸 Screenshots for Task 3:
 
 ## 🔬 Task 4: Disassembly & Hex Dump
 
@@ -179,6 +182,8 @@ Explanation:
 
 ✅ **Status**
 Completed: Successfully disassembled the ELF and generated binary/hex outputs.
+
+## 📸 Screenshots for Task 4:
 
 ## 📚 Task 5: ABI & Register Cheat-Sheet
 
@@ -284,6 +289,8 @@ Explanation: QEMU doesn’t print to UART, but a0 holds the address of "Hello, R
 ✅ **Status**
 Completed: Successfully debugged the program using GDB and QEMU, inspecting registers and instructions.
 
+## 📸 Screenshots for Task 6:
+
 ## 🛰️ Task 7: Bare-Metal Execution with QEMU
 
 **Status:** Completed
@@ -354,6 +361,8 @@ Explanation:
 ✅ **Status**
 Completed: Bare-metal ELF successfully executed with QEMU and OpenSBI, displaying UART output.
 
+## 📸 Screenshots for Task 7:
+
 ## 🧠 Task 8: GCC Optimization Analysis
 
 **Status:** Completed
@@ -400,6 +409,8 @@ Explanation:
 
 ✅ **Status**
 Completed: Successfully compared -O0 and -O2 assembly outputs, highlighting optimization effects.
+
+## 📸 Screenshots for Task 8:
 
 ## ⏱️ Task 9: Inline Assembly Basics
 
@@ -542,6 +553,8 @@ Explanation: Shows the value of x and the cycles taken for the operation.
 ✅ **Status**
 Completed: Successfully measured execution time using inline assembly and rdcycle.
 
+## 📸 Screenshots for Task 9:
+
 ## 🔧 Task 10: Memory-Mapped I/O Demo
 
 **Status:** Completed
@@ -649,6 +662,8 @@ Explanation: Confirms the GPIO toggle and UART output.
 
 ✅ **Status**
 Completed: Demonstrated memory-mapped I/O with GPIO toggling, verified via UART output.
+
+## 📸 Screenshots for Task 10:
 
 ## 📜 Task 11: Linker Script 101
 
@@ -764,6 +779,8 @@ Explanation: Confirms the memory layout and symbol addresses.
 ✅ **Status**
 Completed: Linker script successfully implemented and verified.
 
+## 📸 Screenshots for Task 11:
+
 ## 🚀 Task 12: Start-up Code & crt0
 
 **Status:** Completed
@@ -828,6 +845,8 @@ Explanation: Lists sources for obtaining or developing crt0.S.
 
 ✅ **Status**
 Completed: Explained crt0.S responsibilities and sources.
+
+## 📸 Screenshots for Task 12:
 
 ## ⏰ Task 13: Interrupt Primer
 
@@ -983,6 +1002,8 @@ Explanation: Shows the timer interrupt firing periodically.
 
 ✅ **Status**
 Completed: Successfully enabled and handled MTIP with a simple handler.
+
+## 📸 Screenshots for Task 13:
 
 ## 🧬 Task 14: RV32IMAC vs RV32IMC – What’s the “A”?
 
