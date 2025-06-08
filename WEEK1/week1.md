@@ -643,3 +643,23 @@ Explanation: Toggles a GPIO pin using memory-mapped I/O and outputs via UART.
     _end = .;
     }
 Explanation: Defines memory layout for the bare-metal program.
+### 📄 Startup Code
+    .section .text.start
+    .global _start
+    _start:
+    la sp, _stack_top
+    jal main
+    j .
+    .section .bss
+     .align 4
+    .space 1024
+    _stack_top:
+Explanation: Sets up the stack pointer and jumps to main.
+
+### 🔧 Commands
+    riscv32-unknown-elf-gcc -g -O2 -march=rv32im -mabi=ilp32 -nostdlib -T linker10.ld -o task10.elf task10.c startup10.s
+    readelf -h task10.elf
+    qemu-system-riscv32 -nographic -machine virt -bios none -kernel task10.elf
+Explanation: Compiles, checks the ELF header, and runs the program on QEMU.
+
+### 💬 Output
