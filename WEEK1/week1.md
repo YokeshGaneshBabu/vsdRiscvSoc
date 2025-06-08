@@ -108,6 +108,7 @@ Explanation: The same code from Task 2 is used to generate assembly.
 
 ### ⚙️ Generate Assembly
     riscv32-unknown-elf-gcc -S -O0 hello.c -o hello.s
+    less hello.s
 Explanation: The -S flag generates assembly code (.s file). -O0 disables optimizations for readable output.
 
 ### 🧠 Key Assembly Snippet
@@ -287,35 +288,24 @@ Run a bare-metal ELF using QEMU and OpenSBI to simulate a real RISC-V system.
 - **Platform**: Ubuntu 24.04 LTS, running QEMU for emulation and OpenSBI for firmware.
 
 ### 📄 Code: Bare-Metal UART Program
-
-    #define UART_TX 0x10000000 // UART transmit register for QEMU virt
-    #define UART_READY 0x10000005 // UART status (bit 5 = TX ready)
-
-    void uart_putc(char c) {
-       volatile char* uart_tx = (volatile char*)UART_TX;
-       volatile char* uart_ready = (volatile char*)UART_READY;
-       while (!(*uart_ready & (1 << 5)));
-       *uart_tx = c;
-    }
-
-    void uart_puts(const char* s) {
-       while (*s) uart_putc(*s++);
-    }
-   
-    int main() {
-       uart_puts("Hello from bare-metal!\n");
-       while (1);
-       return 0;
-    }
+     volatile char *uart = (char *)0x10000000;
+     void main()
+     {
+     const char *msg = "Hello, RISC-V!\n";
+     while (*msg) {
+     *uart = *msg++;
+     }
+     while(1);
+     }
 Explanation: A bare-metal program that uses UART to output a message.
 
 ### 📄 Startup Code
 
-      .section .text.start
+      .section .text
       .global _start
       _start:
        la sp, _stack_top
-       jal main
+       call main
        j .
       .section .bss
       .align 4
@@ -327,36 +317,20 @@ Explanation: Sets up the stack pointer and jumps to main.
     OUTPUT_ARCH(riscv)
     ENTRY(_start)
     MEMORY
-    {
-    FLASH (rx) : ORIGIN = 0x80000000, LENGTH = 16M
-    RAM (rw)   : ORIGIN = 0x81000000, LENGTH = 16M
-    }
     SECTIONS
     {
-    .text : {
-    *(.text.start)
-    *(.text)
-    (.text.)
-    } > FLASH
-    .rodata : ALIGN(4) {
-    *(.rodata)
-    (.rodata.)
-    } > FLASH
-    .data : ALIGN(4) {
-    *(.data)
-    (.data.)
-    } > RAM AT > FLASH
-    .bss : ALIGN(4) {
-    *(.bss)
-    (.bss.)
-    } > RAM
-    _end = .;
+    . = 0x80200000;
+    .text : { *(.text*)}
+    .rodata : { *(.rodata*)}
+    .data : { *(.data*)}
+    .bss : { *(.bss*) *(COMMON)}
     }
 Explanation: Defines memory layout for FLASH and RAM, placing sections appropriately.
 
 ### 🔧 Commands
-curl -LO https://github.com/qemu/qemu/raw/v8.0.4/pc-bios/opensbi-riscv32-generic-fw_dynamic.bin
-qemu-system-riscv32 -nographic -machine virt -bios opensbi-riscv32-generic-fw_dynamic.bin -kernel hello2.elf
+      curl -LO https://github.com/qemu/qemu/raw/v8.0.4/pc-bios/opensbi-riscv32-generic-fw_dynamic.bin
+      riscv32-unknown-elf-gcc -g -march=rv32im -mabi=ilp32 inostdlib -T linker.ld -o hello2.elf hello2.c startup.s
+      qemu-system-riscv32 -nographic -machine virt -bios opensbi-riscv32-generic-fw_dynamic.bin -kernel hello2.elf
 Explanation:  
 - Downloads OpenSBI firmware for RISC-V booting.  
 - qemu-system-riscv32: Emulates a RISC-V system using the virt machine.  
@@ -489,6 +463,20 @@ Use inline assembly to read the RISC-V cycle counter and measure execution time 
        uart_puts("\n");
        return x;
     }
+### 📄 Cycle counter
+      #include <stdint.h>
+      // Function to read the 32-bit cycle counter from CSR 0xC00
+      uint32_t read_cycle_counter(void) {
+          uint32_t cycles;
+          __asm__ volatile (
+              "rdcycle %0"
+              : "=r" (cycles) // Output constraint
+              :               // No input constraints
+              :               // No clobbered registers
+          );
+          return cycles;
+      }
+      
 Explanation: Uses inline assembly to read the cycle counter and measure a simple operation’s execution time.
 
 ### 📄 Linker Script
@@ -538,7 +526,7 @@ Explanation: Sets up the stack pointer and jumps to main.
 ### 🔧 Commands
     riscv32-unknown-elf-gcc -g -O0 -march=rv32im -mabi=ilp32 -nostdlib -T linkertask9.ld -o task9.elf task9.c startuptask_9.s
     qemu-system-riscv32 -nographic -machine virt -bios none -kernel task9.elf
-    Explanation: Compiles and runs the program on QEMU without OpenSBI.
+Explanation: Compiles and runs the program on QEMU without OpenSBI.
  
 ### 💬 Output
     Value of x: 43
@@ -726,6 +714,7 @@ Explanation: Sets up the stack pointer and calls main.
       }
 Explanation: Places .text at 0x00000000 and .data at 0x10000000.
 ### 📄 Build Script
+      cat << 'EOF' > build_linker_test.sh
       #!/bin/bash
       echo "=== Task 11: Linker Script Implementation ==="
       echo "1. Compiling assembly and C files..."
@@ -739,7 +728,8 @@ Explanation: Places .text at 0x00000000 and .data at 0x10000000.
       echo -e "\n4. Symbol addresses (first 10):"
       riscv32-unknown-elf-nm task11.elf | head -10
       echo -e "\n✓ Linker script working correctly!"
-
+      EOF
+      chmod +x build_linker_test.sch h
 Explanation: A script to compile, link, and verify the linker script.
 
 ### 🔧 Commands
@@ -980,11 +970,10 @@ Explanation: Defines memory layout for the bare-metal program.
 Explanation: Compiles and runs the program on QEMU.
 
 ### 💬 Output
-      SA
-      Timer enabled
+      SATimer enabled
       ........MTIP
-      ........MTIP
-      ........MTIP
+      MTIP
+      MTIP
 Explanation: Shows the timer interrupt firing periodically.
 
 ⚠️ **Issues Faced**
