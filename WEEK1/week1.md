@@ -62,13 +62,13 @@ Explanation: Adds the toolchain binaries to the system PATH, ensuring tools like
 Explanation: Confirms that the gcc compiler, gdb debugger, and objdump disassembler are installed. The prefix riscv32-unknown-elf indicates the target (32-bit RISC-V, ELF format for bare-metal).
 
 ⚠️ **Issues Faced**
--glibc Mismatch: The toolchain required a compatible glibc version, resolved by switching to Ubuntu 24.04.
--Missing libpython: Some tools depend on Python libraries, fixed by installing via the deadsnakes PPA.
--gdb Not Found: The PATH was initially incorrect; fixed by sourcing .bashrc after updating.
+- **glibc Mismatch:** The toolchain required a compatible glibc version, resolved by switching to Ubuntu 24.04.
+- **Missing libpython:** Some tools depend on Python libraries, fixed by installing via the deadsnakes PPA.
+- **gdb Not Found:** The PATH was initially incorrect; fixed by sourcing .bashrc after updating.
 
 ✅ **Status**
--Completed: Toolchain successfully installed and verified.
--Issues Resolved: All issues (glibc mismatch, libpython, PATH) were fixed, and the setup is fully functional.
+- **Completed:** Toolchain successfully installed and verified.
+- **Issues Resolved:** All issues (glibc mismatch, libpython, PATH) were fixed, and the setup is fully functional.
 
 ## 👋 Task 2: Compiling a RISC-V C Program
 
