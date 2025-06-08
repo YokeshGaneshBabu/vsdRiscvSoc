@@ -118,9 +118,6 @@ Explanation:
 - addi sp,sp,-16: Allocates 16 bytes on the stack for the function’s frame.  
 - sw ra,12(sp): Saves the return address (ra) for function return.
 
-⚠️ **Issues Faced**
-- Verbose Output: Assembly was longer than expected due to -O0, but this was intentional for clarity.
-
 ✅ **Status**
 Completed: Successfully generated and analyzed RISC-V assembly from C code.
 
@@ -159,9 +156,6 @@ Explanation:
 - **Opcode**: Machine code (e.g., 0x01312623).  
 - **Mnemonic**: Instruction (e.g., sw).  
 - **Operands**: Arguments (e.g., ra,12(sp)).
-
-⚠️ **Issues Faced**
-- Large Output: Disassembly was lengthy due to library code inclusion, but focused on main for analysis.
 
 ✅ **Status**
 Completed: Successfully disassembled the ELF and generated binary/hex outputs.
@@ -222,9 +216,6 @@ List all 32 RV32 integer registers with their ABI names and calling-convention r
 | Special         | sp, ra, gp, tp | N/A    | Stack, return address, global/thread ptrs |
 | Constant        | zero     | N/A      | Always reads 0, writes ignored    |
 
-⚠️ **Issues Faced**
-- Understanding ABI: Took time to map registers to roles, but clarified through documentation.
-
 ✅ **Status**
 Completed: ABI and register roles documented with a comprehensive cheat-sheet.
 
@@ -269,9 +260,6 @@ Explanation:
 
 ### 💬 Observation
 Explanation: QEMU doesn’t print to UART, but a0 holds the address of "Hello, RISC-V!", confirming printf executed.
-
-⚠️ **Issues Faced**
-- No UART Output: Expected, as UART isn’t set up yet; focused on register inspection instead.
 
 ✅ **Status**
 Completed: Successfully debugged the program using GDB and QEMU, inspecting registers and instructions.
@@ -389,9 +377,6 @@ Explanation:
 - -O2 produces smaller assembly (fewer lines).  
 - Redundant stack operations removed.  
 - printf setup optimized.
-
-⚠️ **Issues Faced**
-- Complex Diff Output: -O2 removed many instructions, making diff hard to read; focused on main section.
 
 ✅ **Status**
 Completed: Successfully compared -O0 and -O2 assembly outputs, highlighting optimization effects.
@@ -533,9 +518,6 @@ Explanation: Compiles and runs the program on QEMU without OpenSBI.
     Cycles taken: 8410761
 
 Explanation: Shows the value of x and the cycles taken for the operation.
-
-⚠️ **Issues Faced**
-- High Cycle Count: Due to UART overhead; expected for I/O operations.
 
 ✅ **Status**
 Completed: Successfully measured execution time using inline assembly and rdcycle.
@@ -1037,9 +1019,6 @@ Explanation: Highlights why the A extension is important.
 | ❌                            |Enables thread-safe systems|
 
 Explanation: A visual comparison of RV32IMC and RV32IMAC.
-
-⚠️ **Issues Faced**
-- Understanding Use Cases: Took time to research atomic instruction applications; clarified via RISC-V specs.
 
 ✅ **Status**
 Completed: Explained the ‘A’ extension, its instructions, and their importance.
