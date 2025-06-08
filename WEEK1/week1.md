@@ -1292,6 +1292,7 @@ Explanation: Shows the interleaved execution of thread1 and thread2, with the sh
 Completed: Successfully implemented a mutex using lr.w/sc.w, simulated two threads, and verified safe counter increments.
 
 ## 📸 Screenshots for Task 15:
+ ![Screenshot](images/task15.png)
 
 ## 🖨️ Task 16: Using Newlib printf Without an OS
 
